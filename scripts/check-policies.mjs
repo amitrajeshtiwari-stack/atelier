@@ -1,0 +1,11 @@
+import pg from "pg";
+import { readFileSync } from "node:fs";
+const url = readFileSync(".env.local","utf8").split("\n").find(l=>l.startsWith("DATABASE_URL=")).slice(13).trim();
+const c = new pg.Client({ connectionString: url, ssl:{rejectUnauthorized:false} });
+await c.connect();
+const r = await c.query("select tablename, policyname, cmd from pg_policies where schemaname='public' order by tablename, policyname");
+console.log(r.rows.map(x=>`${x.tablename}: ${x.policyname} (${x.cmd})`).join("\n") || "(no policies)");
+const rls = await c.query("select relname, relrowsecurity from pg_class where relnamespace='public'::regnamespace and relkind='r'");
+console.log("--- RLS enabled ---");
+console.log(rls.rows.map(x=>`${x.relname}: ${x.relrowsecurity}`).join("\n"));
+await c.end();

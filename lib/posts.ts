@@ -39,7 +39,7 @@ export async function getPublishedPosts(): Promise<PostPublic[]> {
 
   const { data, error } = await supabase
     .from("posts")
-    .select("*, profile:profiles ( username )")
+    .select("*, profile:profiles!posts_author_id_fkey ( username )")
     .eq("status", "published")
     .order("published_at", { ascending: false });
 
@@ -81,7 +81,7 @@ export async function getPostBySlug(
   const { data: rawComments, error: commentsError } = await supabase
     .from("comments")
     .select(
-      "id, post_id, author_id, parent_id, body, created_at, profile:profiles ( username, avatar_url )"
+      "id, post_id, author_id, parent_id, body, created_at, profile:profiles!comments_author_id_fkey ( username, avatar_url )"
     )
     .eq("post_id", row.id)
     .order("created_at", { ascending: true });

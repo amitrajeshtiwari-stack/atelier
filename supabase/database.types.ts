@@ -163,6 +163,7 @@ export type Database = {
         Row: { id: string; email: string; created_at: string };
         Insert: { id?: string; email: string; created_at?: string };
         Update: Record<string, never>;
+        Relationships: [];
       };
       realtime_events: {
         Row: {
