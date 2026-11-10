@@ -181,8 +181,8 @@ export function MonolithCluster({
   }
 
   return (
-    <group ref={group}>
-      {/* Hero monolith, slightly off-axis like a standing stone. */}
+    // Sits right of the text column so the headline reads left in light mode.
+    <group ref={group} position={[1.3, 0, 0]}>
       <Volume
         shape="monolith"
         position={[0, -0.1, 0]}

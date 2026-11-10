@@ -56,6 +56,9 @@ export function StaggeredText({
     },
   };
 
+  // Group characters into words so line breaks never split a word.
+  const words = text.split(" ");
+
   return (
     <Tag
       className={className}
@@ -64,15 +67,23 @@ export function StaggeredText({
       variants={container}
       aria-label={text}
     >
-      {text.split("").map((character, i) => (
-        <motion.span
-          key={`${character}-${i}`}
-          variants={char}
-          className="inline-block will-change-transform"
+      {words.map((word, wi) => (
+        <span
+          key={`${word}-${wi}`}
+          className="inline-block whitespace-nowrap"
           aria-hidden="true"
         >
-          {character === " " ? "\u00A0" : character}
-        </motion.span>
+          {word.split("").map((character, ci) => (
+            <motion.span
+              key={`${character}-${ci}`}
+              variants={char}
+              className="inline-block will-change-transform"
+            >
+              {character}
+            </motion.span>
+          ))}
+          {wi < words.length - 1 && "\u00A0"}
+        </span>
       ))}
     </Tag>
   );
