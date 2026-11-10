@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Atelier
 
-## Getting Started
+A spatial, editorial 3D journal — essays set in type, arranged in space,
+and lit like a gallery. Built with Next.js (App Router), Three.js
+(@react-three/fiber), Supabase (Postgres + RLS + Realtime + Storage), and
+Tailwind v4.
 
-First, run the development server:
+## Quick start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create `.env.local` in the project root:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# Dashboard → Connect → Data API (publishable key)
+NEXT_PUBLIC_SUPABASE_URL=https://<your-ref>.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_...
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# Dashboard → Connect → Connection string → URI (server-side only)
+DATABASE_URL=postgresql://postgres:<password>@db.<your-ref>.supabase.co:5432/postgres
+```
 
-## Learn More
+```bash
+npm run dev        # http://localhost:3000
+```
 
-To learn more about Next.js, take a look at the following resources:
+Without credentials the app still boots and reads generated demo content
+(`lib/demo-posts.json`) — every surface is reviewable with no database.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Database setup (one-time)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Apply the schema and seed straight to Postgres — **not** through the
+Dashboard SQL editor, which truncates long pastes and splits statements on
+`;` inside string literals:
 
-## Deploy on Vercel
+```bash
+node scripts/run-sql.mjs supabase/schema.sql     # tables, RLS, realtime publication, storage
+node scripts/run-sql.mjs supabase/apply-part2.sql # reactions/subscribers/events + demo content + editor account
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The runner executes statements one at a time (each auto-commits), reports
+the exact failing statement, and notifies PostgREST to reload its schema
+cache. Idempotent — safe to re-run.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Demo login** (created by `apply-part2.sql`):
+`editor@atelier.press` / `atelier-demo-2026`
+
+## Surfaces
+
+| Route | What it does |
+| --- | --- |
+| `/` | Hero — lazy 3D monolith cluster, capability-gated, pauses off-screen |
+| `/journal` | Live feed: featured tilt card, filter pills, realtime "new entry" pill |
+| `/journal/[slug]` | Entry page: ambient 3D scene, 68ch reading column, TOC, reading progress, live reactions + realtime comments with presence |
+| `/about` | The editor, house rules, colophon |
+| `/archive` | Complete index grouped by month |
+| `/studio` | Auth-gated writing desk: autosave drafts, slug + reading-time derivation, cover upload, publish/unpublish |
+
+## API routes
+
+| Endpoint | Behavior |
+| --- | --- |
+| `GET /api/posts` | Published posts, newest first (public) |
+| `GET/POST /api/comments?post_id=<uuid>` | List / create comments (create requires a session; RLS enforces authorship) |
+| `GET/POST /api/reactions?post_id=<uuid>` | Counts + personal state / toggle a reaction (toggle requires a session) |
+| `POST /api/newsletter` | Idempotent subscribe — duplicates return `already: true` |
+| `GET/POST/PUT /api/studio/posts` | Own posts incl. drafts (session required; RLS enforces ownership) |
+
+Every payload crosses the wire through shared Zod schemas
+(`lib/schemas.ts`) — the same shapes validate client, server, and
+realtime events.
+
+## Architecture notes
+
+- **3D is lazy everywhere** — scenes load `ssr: false`, drop to a static
+  gradient without WebGL or under `prefers-reduced-motion`, pause their
+  frameloop when off-screen or the tab is hidden, and cap `dpr` at 1.75.
+  The studio lighting is a procedural `Lightformer` environment — zero
+  network fetches.
+- **Realtime is room, not ticker** — one channel per surface
+  (`lib/use-realtime.ts`), postgres_changes flushed at most every 250ms,
+  presence for the reading room, teardown on unmount.
+- **RLS is the real gate** — the API routes authenticate and validate;
+  the database refuses anything the policies don't allow.
+- **Caching model** — `cacheComponents: false`; pages opt into freshness
+  with per-route `export const revalidate`.
+- **Content pipeline** — `scripts/demo-posts.source.mjs` is the single
+  source of prose; `node scripts/gen-seed.mjs` emits both the SQL seed
+  and the demo JSON so they never drift. Prose deliberately avoids
+  semicolons (they break the Dashboard SQL editor).
+
+## Quality gates
+
+```bash
+npx tsc --noEmit   # strict typecheck
+npx eslint .       # react-hooks v6 + next rules
+npm run build      # production build
+```
+
+## Handy scripts
+
+```bash
+node scripts/run-sql.mjs <file.sql>   # apply SQL directly to Postgres
+node scripts/gen-seed.mjs             # regenerate seed.sql + demo JSON
+node scripts/smoke-realtime.mjs       # insert a comment; assert the event arrives
+node scripts/smoke-studio.mjs         # sign in; verify the RLS write path
+node scripts/notify-reload.mjs        # nudge PostgREST's schema cache
+node scripts/check-policies.mjs       # dump RLS policies + RLS flags
+```
