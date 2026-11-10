@@ -107,11 +107,13 @@ create policy "authors manage their own covers"
   using (bucket_id = 'covers' and auth.uid() = owner);
 
 -- ── Demo author ──────────────────────────────────────────────────────
-
--- ── Demo author ──────────────────────────────────────────────────────
+-- GoTrue's sign-in path requires: the token columns to be '' (not NULL)
+-- and a matching auth.identities row (provider_id = user id). Inserting
+-- auth.users alone yields 500 "Database error querying schema" on login.
 insert into auth.users (
   instance_id, id, aud, role, email, encrypted_password,
   email_confirmed_at, created_at, updated_at,
+  confirmation_token, recovery_token, email_change, email_change_token_new,
   raw_app_meta_data, raw_user_meta_data
 ) values (
   '00000000-0000-0000-0000-000000000000',
@@ -120,10 +122,26 @@ insert into auth.users (
   'editor@atelier.press',
   crypt('atelier-demo-2026', gen_salt('bf')),
   now(), now(), now(),
+  '', '', '', '',
   '{"provider":"email","providers":["email"]}',
   '{"username":"m.calloway","avatar_url":"https://picsum.photos/seed/editor-avatar/96/96"}'
 )
 on conflict (id) do nothing;
+
+insert into auth.identities
+  (provider_id, user_id, provider, identity_data, last_sign_in_at, created_at, updated_at)
+values (
+  '11111111-1111-4111-8111-111111111111',
+  '11111111-1111-4111-8111-111111111111',
+  'email',
+  jsonb_build_object(
+    'sub', '11111111-1111-4111-8111-111111111111',
+    'email', 'editor@atelier.press',
+    'email_verified', true
+  ),
+  now(), now(), now()
+)
+on conflict do nothing;
 
 insert into public.profiles (id, username, avatar_url, bio)
 values (
