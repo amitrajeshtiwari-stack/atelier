@@ -1,6 +1,7 @@
 import { HeroStage } from "@/components/three/hero-stage";
 import { StaggeredText } from "@/components/motion/staggered-text";
 import { ArrowDown } from "lucide-react";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -31,18 +32,18 @@ export default function HomePage() {
           </p>
 
           <div className="mt-12 flex flex-wrap items-center gap-4">
-            <a
+            <Link
               href="/journal"
               className="group inline-flex min-h-11 items-center gap-3 rounded-full bg-ink px-7 text-sm text-paper transition-colors duration-300 hover:bg-accent-strong"
             >
               Read the journal
-            </a>
-            <a
+            </Link>
+            <Link
               href="/about"
               className="inline-flex min-h-11 items-center rounded-full border border-line px-7 text-sm text-ink-soft transition-colors duration-300 hover:border-accent hover:text-ink"
             >
               About the atelier
-            </a>
+            </Link>
           </div>
         </div>
 

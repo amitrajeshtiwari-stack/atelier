@@ -164,4 +164,107 @@
     opacity: 0.5;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.035 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
   }
+
+  /* Article typography — the reading column. 68ch max, Fraunces body
+     headings, drop cap on the first paragraph, generous leading. */
+  .prose-atelier {
+    font-family: var(--font-sans);
+  }
+  .prose-atelier > p:first-of-type::first-letter {
+    font-family: var(--font-display);
+    font-weight: 500;
+    float: left;
+    font-size: 3.4em;
+    line-height: 0.82;
+    padding-right: 0.12em;
+    padding-top: 0.06em;
+    color: var(--accent-strong);
+  }
+  .prose-atelier h2,
+  .prose-atelier h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    scroll-margin-top: 6.5rem;
+  }
+  .prose-atelier h2 {
+    font-size: 1.9em;
+    line-height: 1.15;
+    margin: 2.2em 0 0.7em;
+  }
+  .prose-atelier h3 {
+    font-size: 1.4em;
+    line-height: 1.2;
+    margin: 1.8em 0 0.6em;
+  }
+  .prose-atelier p {
+    margin: 1.1em 0;
+    color: var(--ink);
+  }
+  .prose-atelier p strong { font-weight: 600; }
+  .prose-atelier a {
+    color: var(--ink);
+    text-decoration-line: underline;
+    text-decoration-color: var(--accent);
+    text-underline-offset: 3px;
+    text-decoration-thickness: 1px;
+    transition: color 0.3s var(--ease-editorial);
+  }
+  .prose-atelier a:hover { color: var(--accent-strong); }
+  .prose-atelier blockquote {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: 1.15em;
+    line-height: 1.55;
+    margin: 1.6em 0;
+    padding-left: 1.4em;
+    border-left: 2px solid var(--accent);
+    color: var(--ink-soft);
+  }
+  .prose-atelier ul, .prose-atelier ol {
+    margin: 1.2em 0;
+    padding-left: 1.5em;
+    color: var(--ink);
+  }
+  .prose-atelier ul { list-style: disc; }
+  .prose-atelier ol { list-style: decimal; }
+  .prose-atelier li { margin: 0.5em 0; }
+  .prose-atelier li::marker { color: var(--accent); }
+  .prose-atelier code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background: var(--accent-soft);
+    border-radius: var(--radius-xs);
+    padding: 0.15em 0.4em;
+  }
+  .prose-atelier pre {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    line-height: 1.6;
+    background: var(--canvas-top);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-card);
+    padding: 1.2em 1.4em;
+    overflow-x: auto;
+    margin: 1.6em 0;
+  }
+  .prose-atelier pre code {
+    background: none;
+    padding: 0;
+  }
+  .prose-atelier hr {
+    border: none;
+    margin: 2.4em auto;
+    width: 4rem;
+    height: 2px;
+    background: var(--accent);
+  }
+  .prose-atelier img {
+    border-radius: var(--radius-card);
+    border: 1px solid var(--line);
+    margin: 1.8em 0;
+  }
+  .prose-atelier figure figcaption,
+  .prose-atelier em { color: var(--ink-soft); }
 }

@@ -10,7 +10,12 @@ import { postRowSchema } from "@/lib/schemas";
  * (which also emits supabase/seed.sql), so prose never drifts.
  */
 
-const postSchema = postRowSchema.omit({ author_id: true, status: true });
+const postSchema = postRowSchema.omit({
+  author_id: true,
+  status: true,
+  created_at: true,
+  updated_at: true,
+});
 
 const validated = z
   .object({

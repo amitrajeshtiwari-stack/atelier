@@ -67,7 +67,7 @@ export async function getPostBySlug(
 
   const { data, error } = await supabase
     .from("posts")
-    .select("*, profile:profiles ( username )")
+    .select("*, profile:profiles!posts_author_id_fkey ( username )")
     .eq("slug", slug)
     .eq("status", "published")
     .maybeSingle();

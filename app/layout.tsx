@@ -3,6 +3,7 @@ import { Fraunces, Geist, Geist_Mono } from "next/font/google";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
+import { NewsletterModal } from "@/components/site/newsletter-modal";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -49,6 +50,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <SiteHeader />
           <main className="flex-1">{children}</main>
           <SiteFooter />
+          <NewsletterModal />
         </SmoothScroll>
       </body>
     </html>

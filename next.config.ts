@@ -7,6 +7,13 @@ const nextConfig: NextConfig = {
   // `cacheComponents` (use-cache) model is explicitly OFF here. Realtime
   // subscriptions and route-handler mutations stay client-side uncached.
   cacheComponents: false,
+  images: {
+    remotePatterns: [
+      { protocol: "https", hostname: "picsum.photos" },
+      { protocol: "https", hostname: "fastly.picsum.photos" },
+      { protocol: "https", hostname: "fyomfuvjsykabjgepgkd.supabase.co" },
+    ],
+  },
   turbopack: {
     rules: {
       "*.css": {
