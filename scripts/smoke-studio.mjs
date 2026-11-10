@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import pg from "pg";
+
 import { readFileSync } from "node:fs";
 const env = readFileSync(".env.local","utf8").split("\n");
 const get = (k) => env.find(l=>l.startsWith(k+"=")).slice(k.length+1).trim();
