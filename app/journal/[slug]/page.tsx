@@ -43,12 +43,16 @@ export default async function PostPage({ params }: Params) {
   const { post, comments } = entry;
   const { html, headings } = renderMarkdown(post.content_md);
 
-  // Two neighbors for the "keep walking" strip.
+  // Two neighbors for the "keep walking" strip: the next entry when there
+  // is one, otherwise the previous (the oldest post has no "next"), plus
+  // the newest post as the second door — never the current post itself.
   const all = await getPublishedPosts();
   const index = all.findIndex((p) => p.slug === post.slug);
+  const next = all[index + 1] ?? all[index - 1];
+  const first = all[0];
   const neighbors = [
-    ...all.slice(index + 1, index + 2),
-    ...all.slice(0, 1).filter((p) => p.slug !== post.slug),
+    ...(next ? [next] : []),
+    ...(first && first.slug !== post.slug && first.slug !== next?.slug ? [first] : []),
   ].slice(0, 2);
 
   return (
