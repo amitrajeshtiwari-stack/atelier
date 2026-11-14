@@ -43,7 +43,7 @@ const DEMO_NOTICES: NoticeRow[] = [
   },
   {
     id: "c1a20001-0000-4000-8000-000000000002",
-    slug: "bsf-capf-si-ldce-recruitment-2026",
+    slug: "bsf-capf-si-ldce-notification-2026",
     title:
       "CAPF Sub-Inspector (GD) LDCE 2026 — 1,167 Posts Across BSF, CRPF, ITBP & SSB",
     department: "Border Security Force",
@@ -67,7 +67,7 @@ const DEMO_NOTICES: NoticeRow[] = [
   },
   {
     id: "c1a20001-0000-4000-8000-000000000003",
-    slug: "dsssb-mts-junior-engineer-recruitment-2026",
+    slug: "dsssb-mts-recruitment-2026-notice",
     title: "DSSSB Advt 06/2026 — 1,075 MTS & 185 Junior Engineer (Electrical) Posts",
     department: "Delhi Subordinate Services Selection Board",
     kind: "recruitment",
@@ -111,7 +111,7 @@ const DEMO_NOTICES: NoticeRow[] = [
   },
   {
     id: "c1a20001-0000-4000-8000-000000000005",
-    slug: "india-post-mms-chennai-staff-car-driver-2026",
+    slug: "india-post-office-chennai-recruitment-2026",
     title: "India Post MMS Chennai — 24 Staff Car Driver (Ordinary Grade) Posts",
     department: "India Post",
     kind: "recruitment",
@@ -133,7 +133,7 @@ const DEMO_NOTICES: NoticeRow[] = [
   },
   {
     id: "c1a20001-0000-4000-8000-000000000006",
-    slug: "echs-station-hq-leh-recruitment-2026",
+    slug: "echs-leh-recruitment-2026",
     title:
       "ECHS Station HQ Leh — Clerk, Medical Officer, Nursing Assistant & 7 Other Posts",
     department: "Ex-Servicemen Contributory Health Scheme",

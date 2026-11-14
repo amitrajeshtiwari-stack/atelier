@@ -87,7 +87,7 @@ values
    '2026-11-20 23:59:59+05:30', 20,
    'indian-army-civilian-2026', 'https://rojgarkikhoj.com/feed/', 'live'),
 
-  ('bsf-capf-si-ldce-recruitment-2026',
+  ('bsf-capf-si-ldce-notification-2026',
    'CAPF Sub-Inspector (GD) LDCE 2026 — 1,167 Posts Across BSF, CRPF, ITBP & SSB',
    'Border Security Force', 'recruitment', 'online',
    'Limited Departmental Competitive Examination for 1,167 Sub-Inspector (GD) posts across four forces: ITBP 430, CRPF 377, BSF 235, SSB 125. Open to serving Constable (GD/Tradesmen), HC (GD) and ASI (GD) with 4 years regular service and a bachelor degree in any stream. Selection: computer-based test (200 marks), physical standards, physical efficiency, medical and document verification.',
@@ -99,7 +99,7 @@ values
    '2026-12-31 23:59:59+05:30', 1167,
    'capf-si-gd-ldce-2026', 'https://rojgarkikhoj.com/feed/', 'live'),
 
-  ('dsssb-mts-junior-engineer-recruitment-2026',
+  ('dsssb-mts-recruitment-2026-notice',
    'DSSSB Advt 06/2026 — 1,075 MTS & 185 Junior Engineer (Electrical) Posts',
    'Delhi Subordinate Services Selection Board', 'recruitment', 'online',
    'Delhi SSB advertises 1,260 tentative vacancies under Advt 06/2026: 185 Junior Engineer (Electric/Electrical, Post Code 809/26) and 1,075 Multi-Tasking Staff including MTS General Duty and MTS-Aaya (Female), Post Code 810/26. Online applications only through the Board portal; no other mode is accepted. Submit well before the closing date to avoid heavy-load failures.',
@@ -121,7 +121,7 @@ values
    '2026-12-29 23:59:59+05:30', 458,
    'jkssb-je-2026', 'https://rojgarkikhoj.com/feed/', 'live'),
 
-  ('india-post-mms-chennai-staff-car-driver-2026',
+  ('india-post-office-chennai-recruitment-2026',
    'India Post MMS Chennai — 24 Staff Car Driver (Ordinary Grade) Posts',
    'India Post', 'recruitment', 'offline',
    'Tamil Nadu Circle, Mail Motor Service Chennai invites offline applications for 24 Staff Car Driver (Ordinary Grade) posts: Chennai 15, Coimbatore 3, Salem West 3, Madurai 2, Tiruchirappalli 1. Fill the prescribed form in Hindi, English or Tamil without corrections and send by Speed Post only to reach MMS Chennai before 5 pm on 30 November 2026. Selection follows the Annexure-I exam pattern and syllabus.',
@@ -132,7 +132,7 @@ values
    '2026-11-30 17:00:00+05:30', 24,
    'india-post-tn-2026', 'https://rojgarkikhoj.com/feed/', 'live'),
 
-  ('echs-station-hq-leh-recruitment-2026',
+  ('echs-leh-recruitment-2026',
    'ECHS Station HQ Leh — Clerk, Medical Officer, Nursing Assistant & 7 Other Posts',
    'Ex-Servicemen Contributory Health Scheme', 'recruitment', 'offline',
    'ECHS Station HQ Leh recruits 10 contractual posts, one vacancy each: Medical Officer, Dental Officer, Nursing Assistant, Pharmacist, Lab Technician, Dental Assistant, Clerk, Chowkidar, Female Attendant and Safaiwala. Submit the application form in duplicate with self-attested documents by 20 November 2026; applications received after this date are not accepted.',
