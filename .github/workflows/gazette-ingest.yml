@@ -1,0 +1,28 @@
+# The Gazette — daily filings.
+# Runs the RSS ingest clerk every morning (03:00 IST) so the plate opens
+# to fresh notices. Idempotent: re-running the same feed updates in
+# place; notices whose window has passed are auto-closed.
+#
+# Requires one secret: DATABASE_URL (Supabase → Project Settings →
+# Database → Connection string → URI, with the password URL-encoded).
+
+name: Gazette ingest
+
+on:
+  schedule:
+    - cron: "30 21 * * *" # 03:00 IST
+  workflow_dispatch: {}
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: File today's notices
+        run: node scripts/ingest-gazette.mjs
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
