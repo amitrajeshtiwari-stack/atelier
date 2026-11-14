@@ -165,6 +165,60 @@ export type Database = {
         Update: Record<string, never>;
         Relationships: [];
       };
+      notices: {
+        Row: {
+          id: string;
+          slug: string;
+          title: string;
+          department: string;
+          kind: "recruitment" | "result" | "admit-card" | "answer-key" | "admission";
+          apply_mode: "online" | "offline";
+          summary: string;
+          facts: Array<{ label: string; value: string }>;
+          official_url: string;
+          apply_last_date: string | null;
+          vacancy_count: number | null;
+          series_slug: string;
+          source: string;
+          status: "live" | "closed" | "archived";
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          slug: string;
+          title: string;
+          department: string;
+          kind?: "recruitment" | "result" | "admit-card" | "answer-key" | "admission";
+          apply_mode: "online" | "offline";
+          summary: string;
+          facts?: Array<{ label: string; value: string }>;
+          official_url: string;
+          apply_last_date?: string | null;
+          vacancy_count?: number | null;
+          series_slug: string;
+          source: string;
+          status?: "live" | "closed" | "archived";
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<{
+          slug: string;
+          title: string;
+          department: string;
+          kind: "recruitment" | "result" | "admit-card" | "answer-key" | "admission";
+          apply_mode: "online" | "offline";
+          summary: string;
+          facts: Array<{ label: string; value: string }>;
+          official_url: string;
+          apply_last_date: string | null;
+          vacancy_count: number | null;
+          series_slug: string;
+          source: string;
+          status: "live" | "closed" | "archived";
+        }>;
+        Relationships: [];
+      };
       realtime_events: {
         Row: {
           id: string;
@@ -187,6 +241,13 @@ export type Database = {
     Enums: {
       post_status: "draft" | "published";
       reaction_kind: "like" | "insight" | "bookmark";
+      notice_status: "live" | "closed" | "archived";
+      notice_kind:
+        | "recruitment"
+        | "result"
+        | "admit-card"
+        | "answer-key"
+        | "admission";
     };
     CompositeTypes: Record<string, never>;
   };
