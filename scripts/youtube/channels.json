@@ -1,0 +1,15 @@
+{
+  "theinfiniteproject": {
+    "label": "The Infinite Project",
+    "defaultPrivacy": "public",
+    "defaultCategory": "22",
+    "defaultMadeForKids": false
+  },
+  "goldenerra": {
+    "label": "GoldenErra",
+    "defaultPrivacy": "public",
+    "defaultCategory": "23",
+    "defaultMadeForKids": false,
+    "defaultSyntheticMedia": true
+  }
+}
