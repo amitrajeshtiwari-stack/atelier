@@ -1,11 +1,9 @@
 import Link from "next/link";
 
 const FOOTER_LINKS = [
-  { href: "/journal", label: "Journal" },
-  { href: "/gazette", label: "Gazette" },
+  { href: "/gazette", label: "The Plate" },
   { href: "/archive", label: "Archive" },
   { href: "/about", label: "About" },
-  { href: "/studio", label: "Studio" },
 ];
 
 export function SiteFooter() {
@@ -14,10 +12,10 @@ export function SiteFooter() {
       <div className="mx-auto flex max-w-6xl flex-col items-start justify-between gap-6 px-6 py-12 sm:flex-row sm:items-center md:px-10">
         <div>
           <p className="font-display text-lg">
-            Atelier<span className="text-accent">.</span>
+            Gazette<span className="text-accent">.</span>
           </p>
           <p className="eyebrow mt-2 text-[0.625rem]">
-            A spatial journal · Est. MMXXVI
+            Government job openings · Filed daily
           </p>
         </div>
         <nav aria-label="Footer" className="flex items-center gap-6">

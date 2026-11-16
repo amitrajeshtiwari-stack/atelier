@@ -6,10 +6,9 @@ import { useTheme, applyTheme } from "@/lib/use-theme";
 import { cn } from "@/lib/utils";
 
 const NAV = [
-  { href: "/journal", label: "Journal" },
-  { href: "/gazette", label: "Gazette" },
-  { href: "/about", label: "About" },
+  { href: "/gazette", label: "The Plate" },
   { href: "/archive", label: "Archive" },
+  { href: "/about", label: "About" },
 ];
 
 export function SiteHeader() {
@@ -22,7 +21,7 @@ export function SiteHeader() {
           href="/"
           className="font-display text-lg tracking-tight transition-opacity duration-300 hover:opacity-70"
         >
-          Atelier<span className="text-accent">.</span>
+          Gazette<span className="text-accent">.</span>
         </Link>
 
         <nav aria-label="Primary" className="hidden items-center gap-8 sm:flex">

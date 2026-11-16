@@ -3,7 +3,6 @@ import { Fraunces, Geist, Geist_Mono } from "next/font/google";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
-import { NewsletterModal } from "@/components/site/newsletter-modal";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -26,11 +25,11 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Atelier — A spatial journal",
-    template: "%s — Atelier",
+    default: "Gazette — Government job openings, filed daily",
+    template: "%s — Gazette",
   },
   description:
-    "An editorial, gallery-like journal that reads like walking through a spatial magazine.",
+    "A daily plate of India government job notifications — departments, vacancies, last dates, at a glance. Every notice links to the official portal.",
 };
 
 /** No-flash theme resolution — runs before first paint. */
@@ -50,7 +49,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <SiteHeader />
           <main className="flex-1">{children}</main>
           <SiteFooter />
-          <NewsletterModal />
         </SmoothScroll>
       </body>
     </html>
