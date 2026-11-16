@@ -1,94 +1,75 @@
 import type { Metadata } from "next";
-import { DEMO_AUTHOR } from "@/lib/demo-content";
+import { ShieldCheck } from "lucide-react";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/motion/reveal";
 
 export const metadata: Metadata = {
-  title: "About",
+  title: "About — how the Gazette works",
   description:
-    "The atelier behind Atelier — a one-editor journal on design, engineering, and patient software.",
+    "The Gazette is an automated, daily-updated noticeboard of India government job openings. No filters, no forms, no fees — every entry links to the official portal.",
 };
 
-/** "m.calloway" → "M. Calloway" */
-const displayName = (username: string) =>
-  username
-    .split(/[.\-_\s]+/)
-    .filter(Boolean)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(" ");
-
-const PRINCIPLES = [
+const RULES = [
   {
-    title: "The page is a room",
-    body: "Every layout is a room with doors and corridors. If the reader gets lost, the architecture failed — not the reader.",
+    title: "Official portals only",
+    body: "Every Join now button leads to the government's own website — a .gov.in or .nic.in address shown right under the button. We never link you to an agent, a paid downloader, or ourselves.",
   },
   {
-    title: "Motion means something",
-    body: "Movement explains: weight, consequence, origin. Decoration that animates for its own sake is noise with a budget.",
+    title: "We host nothing",
+    body: "No application forms, no fee payments, no PDFs behind a paywall. The Gazette is a noticeboard — the applying happens entirely on the official portal, under that department's own rules.",
   },
   {
-    title: "Slow by choice",
-    body: "No infinite feeds, no autoplay, no dark patterns. The atelier ships once a month and answers every letter.",
+    title: "Filed by a machine, checked by a person",
+    body: "A pipeline files new notices every morning at 03:00 IST from public recruitment announcements. Facts like last dates and fees are extracted automatically — and a notice without a confident official link is skipped, never guessed.",
   },
   {
-    title: "Print discipline, web honesty",
-    body: "Grid, rhythm, and margins learned from print; live data, realtime, and reachability kept from the web.",
+    title: "No filters, on purpose",
+    body: "The plate reads top to bottom like the paper it is. Filters hide things; a gazette's job is to show everything in the order it arrived.",
   },
 ];
 
 export default function AboutPage() {
-  const name = displayName(DEMO_AUTHOR.username);
-  const bio = DEMO_AUTHOR.bio ?? "Editor of Atelier.";
-
   return (
     <div className="mx-auto max-w-6xl px-6 pb-32 pt-20 md:px-10 md:pt-28">
       <SectionHeading
-        eyebrow="About the Atelier"
-        title="A one-editor journal with a gallery's manners"
-        lede="Atelier is written, typeset, and lit by a single hand. Essays on design, engineering, and the quiet craft of building digital things that last."
+        eyebrow="About the Gazette"
+        title="A daily noticeboard for government job seekers"
+        lede="One quiet page: every government job opening filed as it is announced, with a brief, the facts, and a door that opens onto the official website."
       />
 
-      {/* ── The editor ────────────────────────────────────────────────── */}
+      {/* ── The guarantee ─────────────────────────────────────────────── */}
       <Reveal className="mt-20">
-        <div className="grid items-start gap-10 rounded-[var(--radius-card)] border border-line bg-elevated p-8 shadow-soft md:grid-cols-[auto_1fr] md:p-10">
-          <div className="flex size-20 items-center justify-center rounded-full border border-accent/50 bg-accent-soft font-display text-2xl text-accent-strong">
-            {name
-              .split(" ")
-              .map((part) => part[0])
-              .join("")}
-          </div>
+        <div className="flex flex-wrap items-center gap-5 rounded-[var(--radius-card)] border border-accent/40 bg-accent-soft p-8 md:p-10">
+          <ShieldCheck
+            className="size-10 shrink-0 text-accent-strong"
+            strokeWidth={1.25}
+          />
           <div>
             <p className="font-display text-2xl tracking-tight text-ink">
-              {name}
+              The visitor&apos;s guarantee
             </p>
-            <p className="eyebrow mt-1">Editor-in-chief</p>
-            <div className="mt-5 max-w-[62ch] space-y-4 text-[0.9375rem] leading-relaxed text-ink-soft">
-              {bio
-                .split("\n\n")
-                .filter(Boolean)
-                .map((para, i) => (
-                  <p key={i}>{para}</p>
-                ))}
-            </div>
-            <p className="mt-6 text-sm text-ink-faint">
-              Letters welcome — editor@atelier.press
+            <p className="mt-2 max-w-[70ch] text-sm leading-relaxed text-ink-soft">
+              You will never be asked for money by us, never be sent to a
+              middleman, and never be asked to upload a document here. The
+              Gazette&apos;s only job is to make sure you hear about the opening
+              and reach the official door without getting lost.
             </p>
           </div>
         </div>
       </Reveal>
 
-      {/* ── Principles ────────────────────────────────────────────────── */}
+      {/* ── House rules ───────────────────────────────────────────────── */}
       <section className="mt-24">
         <p className="eyebrow">House rules</p>
         <div className="mt-8 grid gap-6 sm:grid-cols-2">
-          {PRINCIPLES.map((p, i) => (
-            <Reveal key={p.title} delay={Math.min(i * 0.06, 0.2)}>
+          {RULES.map((rule, i) => (
+            <Reveal key={rule.title} delay={Math.min(i * 0.06, 0.2)}>
               <div className="h-full rounded-[var(--radius-card)] border border-line bg-elevated p-7 shadow-soft">
                 <h3 className="font-display text-xl tracking-tight text-ink">
-                  {p.title}
+                  {rule.title}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-ink-soft">
-                  {p.body}
+                  {rule.body}
                 </p>
               </div>
             </Reveal>
@@ -96,22 +77,34 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ── Colophon ──────────────────────────────────────────────────── */}
+      {/* ── How the machine works ─────────────────────────────────────── */}
       <Reveal className="mt-24">
         <div className="rounded-[var(--radius-card)] border border-line p-8 md:p-10">
-          <p className="eyebrow">Colophon</p>
-          <p className="mt-5 max-w-[64ch] text-[0.9375rem] leading-relaxed text-ink-soft">
-            Set in <span className="text-ink">Fraunces</span> and{" "}
-            <span className="text-ink">Geist</span>. Scenes modeled in{" "}
-            <span className="text-ink">Three.js</span>, lit with procedural
-            studio lighting, and paused the moment you look away. The journal
-            runs on <span className="text-ink">Next.js</span> and{" "}
-            <span className="text-ink">Supabase</span> — Postgres with
-            row-level security, realtime publication for the live feed, and
-            storage for the covers. Everything you read is committed, versioned,
-            and reproducible.
+          <p className="eyebrow">Under the hood</p>
+          <p className="mt-5 max-w-[68ch] text-[0.9375rem] leading-relaxed text-ink-soft">
+            Every morning a pipeline reads public recruitment feeds, extracts
+            the facts an applicant needs — last date, application fee, age
+            limit, vacancy count — and files each opening into the plate. The
+            slug of every notice is its source announcement, so a re-run
+            updates in place instead of duplicating. When a last date passes,
+            the notice closes itself. The site runs on{" "}
+            <span className="text-ink">Next.js</span> and{" "}
+            <span className="text-ink">Supabase</span>, with row-level security
+            and realtime publication, so a fresh filing reaches an open plate
+            the moment it lands.
           </p>
         </div>
+      </Reveal>
+
+      {/* ── Disclaimer ────────────────────────────────────────────────── */}
+      <Reveal className="mt-20 border-t border-line pt-6">
+        <p className="max-w-[74ch] font-mono text-[0.625rem] leading-relaxed tracking-[0.06em] text-ink-faint">
+          DISCLAIMER · The Gazette reprints public recruitment announcements
+          for reference only. Details can change — always confirm against the
+          official notification before paying any fee or submitting a form.
+          The Gazette is not affiliated with any government body, and no
+          government department endorses this site.
+        </p>
       </Reveal>
     </div>
   );

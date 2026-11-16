@@ -1,57 +1,52 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getPublishedPosts } from "@/lib/posts";
-import type { PostPublic } from "@/lib/schemas";
-import { formatDate } from "@/lib/utils";
+import { getNotices } from "@/lib/notices";
+import type { NoticeRow } from "@/lib/schemas";
+import {
+  NOTICE_STATE_LABEL,
+  formatNoticeDate,
+  noticeState,
+} from "@/lib/notice-format";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/motion/reveal";
 
 export const metadata: Metadata = {
-  title: "Archive",
+  title: "Archive — every opening, kept in order",
   description:
-    "Every published entry, oldest truths first — the Atelier's complete index.",
+    "The complete Gazette archive: every government job opening ever filed, grouped by month.",
 };
 
 export const revalidate = 300;
 
-/** Group posts under "November 2026"-style month banners. */
-function groupByMonth(posts: PostPublic[]): Array<{
+/** Group notices under "November 2026"-style month banners. */
+function groupByMonth(notices: NoticeRow[]): Array<{
   label: string;
-  posts: PostPublic[];
+  notices: NoticeRow[];
 }> {
-  const groups = new Map<string, PostPublic[]>();
-  for (const post of posts) {
-    if (!post.published_at) continue;
-    const d = new Date(post.published_at);
+  const groups = new Map<string, NoticeRow[]>();
+  for (const notice of notices) {
     const label = new Intl.DateTimeFormat("en-US", {
       month: "long",
       year: "numeric",
-      timeZone: "UTC",
-    }).format(d);
+      timeZone: "Asia/Kolkata",
+    }).format(new Date(notice.created_at));
     const bucket = groups.get(label);
-    if (bucket) bucket.push(post);
-    else groups.set(label, [post]);
+    if (bucket) bucket.push(notice);
+    else groups.set(label, [notice]);
   }
-  return [...groups.entries()].map(([label, list]) => ({ label, posts: list }));
+  return [...groups.entries()].map(([label, list]) => ({ label, notices: list }));
 }
 
-const CATEGORY_PILL: Record<string, string> = {
-  Design: "text-accent-strong",
-  Engineering: "text-ink-soft",
-  Culture: "text-ink-soft",
-  Notes: "text-ink-faint",
-};
-
 export default async function ArchivePage() {
-  const posts = await getPublishedPosts();
-  const groups = groupByMonth(posts);
+  const notices = await getNotices();
+  const groups = groupByMonth(notices);
 
   return (
     <div className="mx-auto max-w-4xl px-6 pb-32 pt-20 md:px-10 md:pt-28">
       <SectionHeading
         eyebrow="The Archive"
-        title="Every page, kept in order"
-        lede="The complete index — no covers, no 3D, just the spine of the journal. For the patient and the returning."
+        title="Every opening, kept in order"
+        lede="The complete record — every notice the Gazette has filed, grouped by the month it appeared. For the returning reader."
       />
 
       <div className="mt-16">
@@ -63,36 +58,34 @@ export default async function ArchivePage() {
                   {group.label}
                 </h2>
                 <span className="text-xs text-ink-faint tabular-nums">
-                  {group.posts.length}{" "}
-                  {group.posts.length === 1 ? "entry" : "entries"}
+                  {group.notices.length}{" "}
+                  {group.notices.length === 1 ? "notice" : "notices"}
                 </span>
               </div>
               <ol>
-                {group.posts.map((post) => (
+                {group.notices.map((notice) => (
                   <li
-                    key={post.slug}
+                    key={notice.slug}
                     className="group border-b border-line/60 py-4"
                   >
                     <Link
-                      href={`/journal/${post.slug}`}
+                      href={`/gazette/${notice.slug}`}
                       className="flex min-h-11 flex-wrap items-baseline gap-x-4 gap-y-1 transition-colors duration-300"
                     >
                       <time
-                        dateTime={post.published_at ?? undefined}
+                        dateTime={notice.created_at}
                         className="w-24 shrink-0 text-xs text-ink-faint tabular-nums"
                       >
-                        {formatDate(post.published_at).replace(/,.*/, "")}
+                        {formatNoticeDate(notice.created_at)}
                       </time>
                       <span className="min-w-0 flex-1 font-display text-lg tracking-tight text-ink transition-colors duration-300 group-hover:text-accent-strong">
-                        {post.title}
+                        {notice.title}
                       </span>
-                      <span
-                        className={`text-[0.625rem] font-medium uppercase tracking-[0.18em] ${CATEGORY_PILL[post.category] ?? ""}`}
-                      >
-                        {post.category}
+                      <span className="font-mono text-[0.625rem] tracking-[0.14em] text-ink-faint uppercase">
+                        {notice.department}
                       </span>
-                      <span className="hidden w-14 text-right text-xs text-ink-faint tabular-nums sm:block">
-                        {post.reading_time} min
+                      <span className="hidden w-24 text-right text-xs text-ink-faint tabular-nums sm:block">
+                        {NOTICE_STATE_LABEL[noticeState(notice)]}
                       </span>
                     </Link>
                   </li>
