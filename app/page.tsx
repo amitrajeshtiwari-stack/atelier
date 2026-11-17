@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { getNotices } from "@/lib/notices";
 import { formatNoticeDate } from "@/lib/notice-format";
 import { GazetteBoard } from "@/components/gazette/gazette-board";
+import { FlagMark } from "@/components/gazette/flag-mark";
 import { Reveal } from "@/components/motion/reveal";
 
 // Editorial freshness: the front page revalidates at most every minute.
@@ -31,7 +32,21 @@ export default async function HomePage() {
   return (
     <article>
       {/* ── Front-page masthead ───────────────────────────────────────── */}
-      <section className="mx-auto max-w-6xl px-6 pb-16 pt-24 md:px-10 md:pt-32">
+      <section className="relative isolate mx-auto max-w-6xl px-6 pb-16 pt-24 md:px-10 md:pt-32">
+        {/* 3D flag, a quiet watermark in the paper */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+        >
+          <div
+            className="absolute -right-28 top-12 w-[24rem] opacity-40 [mask-image:radial-gradient(ellipse_65%_65%_at_55%_45%,black_20%,transparent_70%)] [perspective:1200px] sm:-right-14 sm:w-[32rem] sm:opacity-55 md:-right-6 md:w-[38rem] dark:opacity-45 dark:saturate-125"
+          >
+            <div className="flag-sway">
+              <FlagMark className="block w-full drop-shadow-[0_26px_44px_rgba(28,25,20,0.16)]" />
+            </div>
+          </div>
+        </div>
+
         <Reveal>
           <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-line pb-6">
             <p className="eyebrow">Government job openings · India</p>
