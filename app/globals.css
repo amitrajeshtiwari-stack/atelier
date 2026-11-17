@@ -93,19 +93,15 @@
   to { transform: translate3d(2%, 1.5%, 0) scale(1.06); }
 }
 
-/* The masthead flag: a slow cloth sway in perspective. */
+/* The masthead flag: a gentle breath, no rotation — the flag's edges stay
+   registered to the masthead rule and the text column's right margin. */
 @keyframes flag-sway {
-  0%, 100% {
-    transform: rotateY(-17deg) rotateX(4deg) rotate(-3deg) translate3d(0, 0, 0);
-  }
-  50% {
-    transform: rotateY(-11deg) rotateX(2.5deg) rotate(-1.5deg) translate3d(0, -10px, 0);
-  }
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -5px, 0); }
 }
 
 .flag-sway {
-  animation: flag-sway 15s ease-in-out infinite;
-  transform-style: preserve-3d;
+  animation: flag-sway 18s ease-in-out infinite;
   will-change: transform;
 }
 

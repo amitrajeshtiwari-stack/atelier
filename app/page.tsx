@@ -33,17 +33,27 @@ export default async function HomePage() {
     <article>
       {/* ── Front-page masthead ───────────────────────────────────────── */}
       <section className="relative isolate mx-auto max-w-6xl px-6 pb-16 pt-24 md:px-10 md:pt-32">
-        {/* 3D flag, a quiet watermark in the paper */}
+        {/* 3D flag, a quiet watermark in the paper. Its right edge is
+            anchored to the text column's right margin and its top edge to
+            the masthead rule, so it reads as part of the grid; only the
+            left and bottom dissolve into the page. */}
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
         >
-          <div
-            className="absolute -right-28 top-12 w-[24rem] opacity-40 [mask-image:radial-gradient(ellipse_65%_65%_at_55%_45%,black_20%,transparent_70%)] [perspective:1200px] sm:-right-14 sm:w-[32rem] sm:opacity-55 md:-right-6 md:w-[38rem] dark:opacity-45 dark:saturate-125"
-          >
+          <div className="absolute right-6 top-[8.35rem] w-[20rem] opacity-30 md:right-10 md:top-[10.6rem] md:w-[32rem] md:opacity-45 dark:opacity-25 dark:saturate-125">
             <div className="flag-sway">
               <FlagMark className="block w-full drop-shadow-[0_26px_44px_rgba(28,25,20,0.16)]" />
             </div>
+            {/* Fades the cloth into the paper on the left and bottom only,
+                keeping the right edge crisp against the text margin. */}
+            <div
+              className="absolute inset-0"
+              style={{
+                background:
+                  "radial-gradient(125% 120% at 100% 0%, transparent 42%, var(--paper) 84%)",
+              }}
+            />
           </div>
         </div>
 

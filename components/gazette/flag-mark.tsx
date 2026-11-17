@@ -5,7 +5,7 @@
  */
 
 const WAVE =
-  "M60,70 C160,45 260,95 360,68 C440,48 520,80 600,58 L600,352 C520,372 440,340 360,362 C260,388 160,340 60,352 Z";
+  "M0,70 C100,45 260,95 360,68 C440,48 520,80 640,58 L640,352 C520,372 440,340 360,362 C260,388 100,340 0,352 Z";
 
 /** 24 chakra spokes, generated once at module scope. */
 const SPOKES = Array.from({ length: 24 }, (_, i) => (i * 360) / 24);
@@ -50,14 +50,14 @@ export function FlagMark({ className }: { className?: string }) {
       <g clipPath="url(#flag-cloth)">
         {/* Saffron */}
         <rect x="0" y="0" width="640" height="134" fill="#e8873f" />
-        {/* White — transparent in dark mode so the plate's paper shows
-            through instead of a grey slab. */}
+        {/* White — a faint warm tint in dark mode so the cloth still
+            reads as one piece instead of a hollow middle. */}
         <rect
           x="0"
           y="134"
           width="640"
           height="132"
-          className="fill-[#fbf8f1] dark:fill-transparent"
+          className="fill-[#fbf8f1] dark:fill-[#cfc9bd]"
         />
         {/* Green */}
         <rect x="0" y="266" width="640" height="140" fill="#3f7d4a" />
