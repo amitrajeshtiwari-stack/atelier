@@ -20,7 +20,7 @@ const RULES = [
   },
   {
     title: "Filed by a machine, checked by a person",
-    body: "A pipeline files new notices every morning at 03:00 IST from public recruitment announcements. Facts like last dates and fees are extracted automatically — and a notice without a confident official link is skipped, never guessed.",
+    body: "New openings appear here every morning, drawn from public recruitment announcements. A notice is filed only once its official government link is confirmed — if a link cannot be verified, the opening is skipped, never guessed.",
   },
   {
     title: "No filters, on purpose",
@@ -82,16 +82,13 @@ export default function AboutPage() {
         <div className="rounded-[var(--radius-card)] border border-line p-8 md:p-10">
           <p className="eyebrow">Under the hood</p>
           <p className="mt-5 max-w-[68ch] text-[0.9375rem] leading-relaxed text-ink-soft">
-            Every morning a pipeline reads public recruitment feeds, extracts
-            the facts an applicant needs — last date, application fee, age
-            limit, vacancy count — and files each opening into the plate. The
-            slug of every notice is its source announcement, so a re-run
-            updates in place instead of duplicating. When a last date passes,
-            the notice closes itself. The site runs on{" "}
-            <span className="text-ink">Next.js</span> and{" "}
-            <span className="text-ink">Supabase</span>, with row-level security
-            and realtime publication, so a fresh filing reaches an open plate
-            the moment it lands.
+            The plate is refreshed every morning, and each notice is arranged
+            so the facts an applicant needs sit in one place — last date,
+            application fee, age limit, vacancy count. When a last date passes,
+            the notice moves to closed, so what you read is what is still open.
+            Nothing here needs an account, a subscription, or a fee: the plate
+            simply shows the newest openings first, and the archive keeps the
+            rest in order.
           </p>
         </div>
       </Reveal>
