@@ -4,8 +4,11 @@
  * Purely decorative: aria-hidden, no interaction.
  */
 
+/* Cloth pinned at the right edge (the text margin), billowing toward its
+   free end on the left: the wave amplitude grows leftwards, and the left
+   edge dissolves into the paper via the page overlay. */
 const WAVE =
-  "M0,70 C100,45 260,95 360,68 C440,48 520,80 640,58 L640,352 C520,372 440,340 360,362 C260,388 100,340 0,352 Z";
+  "M640,12 C590,8 550,30 500,30 C450,30 420,12 370,16 C320,20 300,42 250,42 C200,42 180,20 130,24 C90,27 60,50 20,44 C10,42 4,34 0,32 L0,368 C16,374 40,360 80,372 C130,388 160,364 210,372 C260,380 280,358 330,366 C380,374 400,352 450,362 C500,372 520,354 560,364 C590,372 615,378 640,378 Z";
 
 /** 24 chakra spokes, generated once at module scope. */
 const SPOKES = Array.from({ length: 24 }, (_, i) => (i * 360) / 24);
@@ -38,10 +41,10 @@ export function FlagMark({ className }: { className?: string }) {
 
       {/* Contact shadow under the cloth. */}
       <ellipse
-        cx="330"
-        cy="382"
+        cx="350"
+        cy="388"
         rx="270"
-        ry="16"
+        ry="14"
         fill="#1c1914"
         opacity="0.10"
         filter="url(#flag-soft)"
