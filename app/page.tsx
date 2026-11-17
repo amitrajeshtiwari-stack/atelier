@@ -33,30 +33,6 @@ export default async function HomePage() {
     <article>
       {/* ── Front-page masthead ───────────────────────────────────────── */}
       <section className="relative isolate mx-auto max-w-6xl px-6 pb-16 pt-24 md:px-10 md:pt-32">
-        {/* 3D flag, a quiet watermark in the paper. Its right edge is
-            anchored to the text column's right margin and its top edge to
-            the masthead rule, so it reads as part of the grid; only the
-            left and bottom dissolve into the page. */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
-        >
-          <div className="absolute right-6 top-[8.35rem] w-[20rem] opacity-30 md:right-10 md:top-[10.6rem] md:w-[32rem] md:opacity-45 dark:opacity-25 dark:saturate-125">
-            <div className="flag-sway">
-              <FlagMark className="block w-full drop-shadow-[0_26px_44px_rgba(28,25,20,0.16)]" />
-            </div>
-            {/* Fades the cloth into the paper on the left and bottom only,
-                keeping the right edge crisp against the text margin. */}
-            <div
-              className="absolute inset-0"
-              style={{
-                background:
-                  "radial-gradient(125% 120% at 100% 0%, transparent 42%, var(--paper) 84%)",
-              }}
-            />
-          </div>
-        </div>
-
         <Reveal>
           <div className="flex flex-wrap items-baseline justify-between gap-4 border-b border-line pb-6">
             <p className="eyebrow">Government job openings · India</p>
@@ -64,32 +40,56 @@ export default async function HomePage() {
               Edition of {today} · IST
             </p>
           </div>
-          <h1 className="mt-10 max-w-[20ch] text-display">
-            Openings, in the order they were announced
-          </h1>
-          <p className="mt-8 max-w-[56ch] text-lg leading-relaxed text-ink-soft">
-            A daily plate of government job notifications — departments,
-            vacancies, last dates, at a glance. No filters, no forms: open a
-            notice for its brief, then join through the official government
-            website.
-          </p>
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <Link
-              href="/gazette"
-              className="group inline-flex min-h-11 items-center gap-3 rounded-full bg-ink px-7 text-sm text-paper transition-colors duration-300 hover:bg-accent-strong"
+
+          {/* The flag hangs from the rule, its left edge on the text
+              margin, its cloth waving toward the free right end and
+              dissolving into the paper. */}
+          <div className="relative">
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute left-0 top-0 -z-10 w-[20rem] opacity-30 md:w-[32rem] md:opacity-40 dark:opacity-25 dark:saturate-125"
             >
-              Read the full plate
-              <ArrowUpRight
-                className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                strokeWidth={1.5}
+              <div className="flag-sway">
+                <FlagMark className="block w-full drop-shadow-[0_26px_44px_rgba(28,25,20,0.16)]" />
+              </div>
+              {/* Fades the cloth into the paper on the right and bottom
+                  only, keeping the left edge crisp against the margin. */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  background:
+                    "radial-gradient(125% 120% at 0% 0%, transparent 42%, var(--paper) 84%)",
+                }}
               />
-            </Link>
-            <Link
-              href="/about"
-              className="inline-flex min-h-11 items-center rounded-full border border-line px-7 text-sm text-ink-soft transition-colors duration-300 hover:border-accent hover:text-ink"
-            >
-              How it works
-            </Link>
+            </div>
+
+            <h1 className="mt-10 max-w-[20ch] text-display">
+              Openings, in the order they were announced
+            </h1>
+            <p className="mt-8 max-w-[56ch] text-lg leading-relaxed text-ink-soft">
+              A daily plate of government job notifications — departments,
+              vacancies, last dates, at a glance. No filters, no forms: open a
+              notice for its brief, then join through the official government
+              website.
+            </p>
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <Link
+                href="/gazette"
+                className="group inline-flex min-h-11 items-center gap-3 rounded-full bg-ink px-7 text-sm text-paper transition-colors duration-300 hover:bg-accent-strong"
+              >
+                Read the full plate
+                <ArrowUpRight
+                  className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                  strokeWidth={1.5}
+                />
+              </Link>
+              <Link
+                href="/about"
+                className="inline-flex min-h-11 items-center rounded-full border border-line px-7 text-sm text-ink-soft transition-colors duration-300 hover:border-accent hover:text-ink"
+              >
+                How it works
+              </Link>
+            </div>
           </div>
         </Reveal>
       </section>
