@@ -219,24 +219,121 @@ function formatReadable(ddmmyyyy) {
   return `${Number(m[1])} ${months[Number(m[2]) - 1]} ${m[3]}`;
 }
 
-function extractSummary(text) {
-  // Prefer the "Short Information:" block; fall back to the opening text.
-  const short = text.match(/short\s+information:?\s*([\s\S]{100,1200})/i)?.[1] ?? text;
-  const cleaned = short
-    .replace(/\[[^\]]*\]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
-  // Cut at the first sentence boundary past ~240 chars, cap at 580.
-  let cut = cleaned.slice(0, 580);
-  if (cleaned.length > 580) {
-    const period = cleaned.slice(0, 580).lastIndexOf(". ");
-    if (period > 240) cut = cleaned.slice(0, period + 1);
+/**
+ * The brief is written here, in the Gazette's own words, from the facts
+ * that were extracted — never copied from the source article. The feed's
+ * paragraph is a publisher's prose, and republishing it would make this a
+ * mirror rather than a publication.
+ */
+function composeBrief({ department, kind, vacancies, facts, applyMode }) {
+  const value = (re) => facts.find((f) => re.test(f.label))?.value ?? null;
+  const lastDate = value(/last\s*date/i);
+  const fee = value(/fee/i);
+  const age = value(/age/i);
+  const posts = vacancies
+    ? `${vacancies.toLocaleString("en-IN")} ${vacancies === 1 ? "post" : "posts"}`
+    : null;
+
+  const lines = [];
+
+  if (kind === "recruitment") {
+    lines.push(
+      posts
+        ? `${department} has issued a recruitment notice for ${posts}.`
+        : `${department} has issued a recruitment notice covered by the heading above.`
+    );
+    lines.push(
+      applyMode === "offline"
+        ? `Applications go on paper — by post or by hand — and must reach the office${
+            lastDate ? ` by ${lastDate}` : " before the closing date in the notification"
+          }.`
+        : `Applications are made through the official portal${
+            lastDate ? `, with ${lastDate} as the last date` : ", within the window stated in the notification"
+          }.`
+    );
+    if (fee) {
+      lines.push(
+        /(^|\b)Rs\s?0\b/i.test(fee)
+          ? "No application fee is stated for any category."
+          : `The application fee is ${fee}.`
+      );
+    }
+    if (age) lines.push(`The age window is ${age}.`);
+    lines.push(
+      "Eligibility, selection stages and the document list are set out in the official notification."
+    );
+  } else if (kind === "admit-card") {
+    lines.push(
+      `${department} has published an admit card for this examination.`
+    );
+    lines.push(
+      "Download the hall ticket from the official portal and check the exam date, centre, reporting time and the photo and signature printed on it."
+    );
+    if (lastDate) lines.push(`The notice records ${lastDate} as its closing date.`);
+  } else if (kind === "result") {
+    lines.push(`${department} has declared a result under this notice.`);
+    lines.push(
+      "Open the official page to check your roll number, score and the next stage, and keep a copy of the result PDF."
+    );
+  } else if (kind === "answer-key") {
+    lines.push(`${department} has published an answer key for this examination.`);
+    lines.push(
+      "Compare your responses against the key and use the objection window, where one is open, before it closes."
+    );
+  } else {
+    lines.push(`${department} has opened admissions under this notice.`);
+    lines.push(
+      "The official page carries the programme detail, eligibility rules and the deadline for submitting the form."
+    );
+    if (fee) lines.push(`The fee stated in the notice is ${fee}.`);
   }
-  return cut.slice(0, 580).trim();
+
+  return lines.join(" ").replace(/\s+/g, " ").trim().slice(0, 590);
 }
 
-function classifyKind(title, categories) {
-  const hay = `${title} ${categories.join(" ")}`.toLowerCase();
+/**
+ * Source headlines are written for search snippets: "… 2026: Apply Online
+ * for Posts | Notification, Eligibility & Exam Dates @ site.gov.in". We
+ * keep the substance — the body, the post, the year — and drop the
+ * keyword scaffolding, so a notice reads like a filing, not an ad.
+ */
+function cleanTitle(raw) {
+  let title = raw.replace(/\s+/g, " ").trim();
+
+  const TAILS = [
+    /\s*[>|]\s*apply\s+(?:online|offline)\b.*$/i,
+    /\s*[-–—]\s*apply\s+(?:online|offline)\b.*$/i,
+    /\s*[>|]\s*(?:check|download|click)\b.*$/i,
+    /\s*\|\s*(?:notification|eligibility|exam|salary|check|download|apply)\b.*$/i,
+    /\s*[-–—]\s*(?:check|download)\b.*$/i,
+    /\s*,\s*(?:check|download|eligibility)\b.*$/i,
+    /\s*@\s*[\w.-]+$/i,
+  ];
+
+  for (let pass = 0; pass < 3; pass += 1) {
+    let changed = false;
+    for (const pattern of TAILS) {
+      const next = title.replace(pattern, "").trim();
+      if (next !== title && next.length > 24) {
+        title = next;
+        changed = true;
+      }
+    }
+    if (!changed) break;
+  }
+
+  return title
+    .replace(/\s*:?\s*notification\s+out\s*(?:for\s+)?/i, ": ")
+    .replace(/\)(?=[A-Za-z])/g, ") ")
+    .replace(/\s*[>|]\s*$/,"")
+    .replace(/\s{2,}/g, " ")
+    .replace(/\s+([,.;:])/g, "$1")
+    .replace(/[:;,\-–—\s]+$/, "")
+    .slice(0, 200)
+    .trim();
+}
+
+function classifyKind(title, categories) {  const hay = `${title} ${categories.join(" ")}`.toLowerCase();
   if (/admit\s*card|hall\s*ticket/.test(hay)) return "admit-card";
   if (/answer\s*key/.test(hay)) return "answer-key";
   if (/\bresult\b/.test(hay)) return "result";
@@ -344,26 +441,30 @@ function noticeFromItem(item, source) {
   if (!officialUrl) return { skip: "no official government link found" };
 
   const { facts, lastDate } = extractFacts(text);
-  const summary = extractSummary(text);
-  if (summary.length < 40) return { skip: "summary too thin to be useful" };
-
   const year = item.title.match(/(20\d{2})/)?.[1] ?? String(new Date().getFullYear());
   const department = deriveDepartment(item.title, text, officialUrl);
+  const kind = classifyKind(item.title, item.categories);
+  const applyMode = classifyMode(item.title, item.categories, text);
+  const vacancies = extractVacancies(item.title, text);
+
+  const summary = composeBrief({ department, kind, vacancies, facts, applyMode });
+  if (summary.length < 120) return { skip: "too few facts to write a useful brief" };
+
   const seriesSlug = slugify(`${department} ${year}`);
   if (!seriesSlug) return { skip: "unsluggable series" };
 
   return {
     row: {
       slug,
-      title: item.title.slice(0, 200),
+      title: cleanTitle(item.title),
       department,
-      kind: classifyKind(item.title, item.categories),
-      apply_mode: classifyMode(item.title, item.categories, text),
+      kind,
+      apply_mode: applyMode,
       summary,
       facts: JSON.stringify(facts),
       official_url: officialUrl,
       apply_last_date: lastDate,
-      vacancy_count: extractVacancies(item.title, text),
+      vacancy_count: vacancies,
       series_slug: seriesSlug,
       source: source.feed,
       status: "live",
@@ -409,6 +510,7 @@ async function fileRows(rows) {
   if (DRY) {
     for (const row of rows) {
       log(`  ⚖ ${row.slug}`);
+      log(`     title ${row.title}`);
       log(`     dept ${row.department} · ${row.apply_mode} · ${row.vacancy_count ?? "?"} posts`);
       log(`     last ${row.apply_last_date ?? "—"} · ${row.official_url}`);
       for (const fact of JSON.parse(row.facts)) {

@@ -13,6 +13,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/motion/reveal";
 import { NoticePlateRow } from "@/components/gazette/notice-plate-row";
+import { applicationChecklist } from "@/lib/notice-guidance";
 import { SITE_NAME, SITE_URL, openGraphFor, twitterFor } from "@/lib/site";
 
 export const revalidate = 60;
@@ -204,6 +205,32 @@ export default async function NoticePage({ params }: Params) {
         </Reveal>
       ) : null}
 
+      {/* ── Before you apply ──────────────────────────────────────────── */}
+      <Reveal className="mt-14 max-w-[68ch]">
+        <p className="eyebrow">
+          {notice.kind === "recruitment" ? "Before you apply" : "Before you use it"}
+        </p>
+        <ul className="mt-5 border-t border-line">
+          {applicationChecklist({
+            kind: notice.kind,
+            applyMode: notice.apply_mode,
+            hasFee: notice.facts.some(
+              (fact) => /fee/i.test(fact.label) && !/\bRs\s?0\b/i.test(fact.value)
+            ),
+          }).map((item) => (
+            <li
+              key={item}
+              className="grid grid-cols-[1.25rem_1fr] gap-x-4 border-b border-line py-3.5 text-sm leading-relaxed text-ink-soft sm:text-base"
+            >
+              <span aria-hidden="true" className="pt-0.5 font-mono text-xs text-accent">
+                —
+              </span>
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </Reveal>
+
       {/* ── Join now ──────────────────────────────────────────────────── */}
       <Reveal className="mt-16">
         <div className="max-w-[68ch] border border-accent/40 bg-accent-soft px-6 py-6 sm:px-8">
@@ -246,15 +273,31 @@ export default async function NoticePage({ params }: Params) {
         </section>
       ) : null}
 
-      {/* ── Disclaimer ───────────────────────────────────────────────── */}
-      <Reveal className="mt-20 max-w-[68ch] border-t border-line pt-6">
-        <p className="font-mono text-[0.625rem] leading-relaxed tracking-[0.06em] text-ink-faint">
-          DISCLAIMER · The Gazette reprints public recruitment announcements
-          for reference only and never hosts applications. Every entry links
-          to the official government portal. Details can change — always
-          confirm against the official notification before paying any fee or
-          submitting a form. Atelier is not affiliated with any government
-          body.
+      {/* ── About this filing ────────────────────────────────────────── */}
+      <Reveal className="mt-20 max-w-[68ch] border-t border-line pt-8">
+        <p className="eyebrow">About this filing</p>
+        <p className="mt-4 text-sm leading-relaxed text-ink-soft">
+          Filed on {formatNoticeDate(notice.created_at)} from{" "}
+          {notice.department}&rsquo;s own announcement. The brief, the checklist
+          and the summary on this page are written by {SITE_NAME}; the official
+          notification remains the record of authority and prevails wherever the
+          two differ.
+        </p>
+        <p className="mt-4 text-sm leading-relaxed text-ink-soft">
+          {SITE_NAME} hosts no applications and charges nothing. If a detail
+          here is wrong,{" "}
+          <Link href="/contact" className="text-ink underline decoration-line underline-offset-4">
+            tell us
+          </Link>{" "}
+          and we will correct it under our{" "}
+          <Link href="/editorial" className="text-ink underline decoration-line underline-offset-4">
+            editorial policy
+          </Link>
+          . See also the{" "}
+          <Link href="/disclaimer" className="text-ink underline decoration-line underline-offset-4">
+            disclaimer
+          </Link>
+          .
         </p>
       </Reveal>
     </article>
