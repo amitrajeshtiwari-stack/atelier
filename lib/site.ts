@@ -7,6 +7,8 @@
  * server, which keeps local metadata honest without hardcoding a domain
  * we have not launched on yet.
  */
+import type { Metadata } from "next";
+
 export const SITE_URL = (
   process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"
 ).replace(/\/+$/, "");
@@ -19,6 +21,17 @@ export const SITE_DESCRIPTION =
   "A daily plate of India government job notifications — departments, vacancies, last dates, at a glance. Every notice links to the official portal.";
 
 export const SITE_LOCALE = "en_IN";
+
+/**
+ * The inbox readers can actually reach. Set `NEXT_PUBLIC_CONTACT_EMAIL` in
+ * the deployment environment; until then it points at a reserved `.example`
+ * domain so a placeholder can never be mistaken for a live address.
+ */
+export const CONTACT_EMAIL =
+  process.env.NEXT_PUBLIC_CONTACT_EMAIL ?? "hello@gazette.example";
+
+/** The date the policy pages were last revised. */
+export const POLICIES_UPDATED = "18 November 2026";
 
 /** The shared social card every page falls back to. */
 export const SOCIAL_IMAGE = {
@@ -68,5 +81,27 @@ export function twitterFor({
     title,
     description,
     images: [SOCIAL_IMAGE.url],
+  };
+}
+
+/**
+ * Metadata for a standing page in one call — title, description, canonical
+ * and both social cards — so no route forgets one of them.
+ */
+export function pageMeta({
+  path,
+  title,
+  description,
+}: {
+  path: string;
+  title: string;
+  description: string;
+}): Metadata {
+  return {
+    title,
+    description,
+    alternates: { canonical: path },
+    openGraph: openGraphFor({ path, title, description }),
+    twitter: twitterFor({ title, description }),
   };
 }

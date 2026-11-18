@@ -10,6 +10,11 @@ const STANDING_PAGES: MetadataRoute.Sitemap = [
   { url: "/gazette", changeFrequency: "daily", priority: 0.9 },
   { url: "/archive", changeFrequency: "weekly", priority: 0.6 },
   { url: "/about", changeFrequency: "monthly", priority: 0.5 },
+  { url: "/editorial", changeFrequency: "monthly", priority: 0.4 },
+  { url: "/contact", changeFrequency: "yearly", priority: 0.3 },
+  { url: "/privacy", changeFrequency: "yearly", priority: 0.2 },
+  { url: "/terms", changeFrequency: "yearly", priority: 0.2 },
+  { url: "/disclaimer", changeFrequency: "yearly", priority: 0.2 },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

@@ -30,6 +30,10 @@ DATABASE_URL=postgresql://postgres.<ref>:<password>@aws-0-<region>.pooler.supaba
 # and social cards all derive from it, so set it once at deploy time.
 # Falls back to http://localhost:3000 when unset.
 NEXT_PUBLIC_SITE_URL=https://your-domain.example
+
+# The inbox published on /contact and every policy page. Falls back to a
+# clearly-marked placeholder until it is set.
+NEXT_PUBLIC_CONTACT_EMAIL=hello@your-domain.example
 ```
 
 ```bash
