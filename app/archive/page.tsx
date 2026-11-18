@@ -9,11 +9,22 @@ import {
 } from "@/lib/notice-format";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/motion/reveal";
+import { openGraphFor, twitterFor } from "@/lib/site";
+
+const PAGE_TITLE = "Archive — every opening, kept in order";
+const PAGE_DESCRIPTION =
+  "The complete Gazette archive: every government job opening ever filed, grouped by month.";
 
 export const metadata: Metadata = {
-  title: "Archive — every opening, kept in order",
-  description:
-    "The complete Gazette archive: every government job opening ever filed, grouped by month.",
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  alternates: { canonical: "/archive" },
+  openGraph: openGraphFor({
+    path: "/archive",
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+  }),
+  twitter: twitterFor({ title: PAGE_TITLE, description: PAGE_DESCRIPTION }),
 };
 
 export const revalidate = 300;

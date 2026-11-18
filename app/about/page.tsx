@@ -2,11 +2,22 @@ import type { Metadata } from "next";
 import { ShieldCheck } from "lucide-react";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Reveal } from "@/components/motion/reveal";
+import { openGraphFor, twitterFor } from "@/lib/site";
+
+const PAGE_TITLE = "About — how the Gazette works";
+const PAGE_DESCRIPTION =
+  "The Gazette is a daily-updated noticeboard of India government job openings. No filters, no forms, no fees — every entry links to the official portal.";
 
 export const metadata: Metadata = {
-  title: "About — how the Gazette works",
-  description:
-    "The Gazette is an automated, daily-updated noticeboard of India government job openings. No filters, no forms, no fees — every entry links to the official portal.",
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  alternates: { canonical: "/about" },
+  openGraph: openGraphFor({
+    path: "/about",
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+  }),
+  twitter: twitterFor({ title: PAGE_TITLE, description: PAGE_DESCRIPTION }),
 };
 
 const RULES = [

@@ -25,6 +25,11 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_...
 # the direct db.<ref>.supabase.co host is IPv6-only, so GitHub
 # Actions runners need the IPv4-compatible pooler host)
 DATABASE_URL=postgresql://postgres.<ref>:<password>@aws-0-<region>.pooler.supabase.com:5432/postgres
+
+# Public origin of the deployed site. Canonical links, the sitemap, robots
+# and social cards all derive from it, so set it once at deploy time.
+# Falls back to http://localhost:3000 when unset.
+NEXT_PUBLIC_SITE_URL=https://your-domain.example
 ```
 
 ```bash

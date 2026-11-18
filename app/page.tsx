@@ -1,10 +1,29 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { ArrowUpRight } from "lucide-react";
 import { getNotices } from "@/lib/notices";
 import { formatNoticeDate } from "@/lib/notice-format";
 import { GazetteBoard } from "@/components/gazette/gazette-board";
 import { FlagMark } from "@/components/gazette/flag-mark";
 import { Reveal } from "@/components/motion/reveal";
+import {
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_URL,
+  openGraphFor,
+  twitterFor,
+} from "@/lib/site";
+
+const HOME_TITLE = `${SITE_NAME} — ${SITE_TAGLINE}`;
+
+export const metadata: Metadata = {
+  title: HOME_TITLE,
+  description: SITE_DESCRIPTION,
+  alternates: { canonical: "/" },
+  openGraph: openGraphFor({ path: "/", title: HOME_TITLE }),
+  twitter: twitterFor({ title: HOME_TITLE }),
+};
 
 // Editorial freshness: the front page revalidates at most every minute.
 export const revalidate = 60;
@@ -29,8 +48,37 @@ export default async function HomePage() {
   const latest = notices.slice(0, 8);
   const today = formatNoticeDate(new Date().toISOString());
 
+  // Publication-level structured data: tells search engines what this
+  // site is, what it is called, and which URL is canonical for it.
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        url: SITE_URL,
+        name: SITE_NAME,
+        description: SITE_DESCRIPTION,
+        inLanguage: "en-IN",
+        publisher: { "@id": `${SITE_URL}/#organization` },
+      },
+      {
+        "@type": "Organization",
+        "@id": `${SITE_URL}/#organization`,
+        name: SITE_NAME,
+        url: SITE_URL,
+        logo: `${SITE_URL}/og.png`,
+        description: SITE_TAGLINE,
+      },
+    ],
+  };
+
   return (
     <article>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* ── Front-page masthead ───────────────────────────────────────── */}
       <section className="relative isolate mx-auto max-w-6xl px-6 pb-16 pt-24 md:px-10 md:pt-32">
         <Reveal>

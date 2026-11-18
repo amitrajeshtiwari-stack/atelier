@@ -3,6 +3,14 @@ import { Fraunces, Geist, Geist_Mono } from "next/font/google";
 import { SmoothScroll } from "@/components/smooth-scroll";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
+import {
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TAGLINE,
+  SITE_URL,
+  openGraphFor,
+  twitterFor,
+} from "@/lib/site";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -24,12 +32,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  applicationName: SITE_NAME,
   title: {
-    default: "Gazette — Government job openings, filed daily",
-    template: "%s — Gazette",
+    default: `${SITE_NAME} — ${SITE_TAGLINE}`,
+    template: `%s — ${SITE_NAME}`,
   },
-  description:
-    "A daily plate of India government job notifications — departments, vacancies, last dates, at a glance. Every notice links to the official portal.",
+  description: SITE_DESCRIPTION,
+  openGraph: openGraphFor({ path: "/" }),
+  twitter: twitterFor({}),
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
 };
 
 /** No-flash theme resolution — runs before first paint. */

@@ -2,11 +2,22 @@ import type { Metadata } from "next";
 import { getNotices } from "@/lib/notices";
 import { GazetteBoard } from "@/components/gazette/gazette-board";
 import { SectionHeading } from "@/components/ui/section-heading";
+import { openGraphFor, twitterFor } from "@/lib/site";
+
+const PAGE_TITLE = "The Plate — every notice filed";
+const PAGE_DESCRIPTION =
+  "The complete Gazette plate: every government job opening filed so far, newest first. Every entry links to the official portal.";
 
 export const metadata: Metadata = {
-  title: "The Plate — every notice filed",
-  description:
-    "The complete Gazette plate: every government job opening filed so far, newest first. Every entry links to the official portal.",
+  title: PAGE_TITLE,
+  description: PAGE_DESCRIPTION,
+  alternates: { canonical: "/gazette" },
+  openGraph: openGraphFor({
+    path: "/gazette",
+    title: PAGE_TITLE,
+    description: PAGE_DESCRIPTION,
+  }),
+  twitter: twitterFor({ title: PAGE_TITLE, description: PAGE_DESCRIPTION }),
 };
 
 // Editorial freshness: the plate revalidates at most every minute.

@@ -13,6 +13,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Reveal } from "@/components/motion/reveal";
 import { NoticePlateRow } from "@/components/gazette/notice-plate-row";
+import { SITE_NAME, SITE_URL, openGraphFor, twitterFor } from "@/lib/site";
 
 export const revalidate = 60;
 
@@ -29,15 +30,26 @@ const KIND_LABEL: Record<string, string> = {
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
   const notice = await getNoticeBySlug(slug);
-  if (!notice) return {};
+  if (!notice) return { title: "Notice not found", robots: { index: false } };
+
+  const path = `/gazette/${notice.slug}`;
+  const description = notice.summary.slice(0, 300);
+
   return {
     title: notice.title,
-    description: notice.summary,
+    description,
+    alternates: { canonical: path },
     openGraph: {
-      title: notice.title,
-      description: notice.summary,
-      type: "article",
+      ...openGraphFor({
+        path,
+        title: notice.title,
+        description,
+        type: "article",
+      }),
+      publishedTime: notice.created_at,
+      modifiedTime: notice.updated_at,
     },
+    twitter: twitterFor({ title: notice.title, description }),
   };
 }
 
@@ -49,29 +61,62 @@ export default async function NoticePage({ params }: Params) {
   const series = await getNoticesInSeries(notice.series_slug, notice.slug);
   const state = noticeState(notice);
 
-  // JobPosting structured data — the fields search engines actually use
-  // for Indian government recruitment listings.
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "JobPosting",
-    title: notice.title,
-    description: notice.summary,
-    datePosted: notice.created_at,
-    validThrough: notice.apply_last_date ?? undefined,
-    employmentType: "FULL_TIME",
-    hiringOrganization: {
-      "@type": "GovernmentOrganization",
-      name: notice.department,
-      sameAs: notice.official_url,
-    },
-    jobLocationType: "TELECOMMUTE",
-    applicantLocationRequirements: {
-      "@type": "Country",
-      name: "India",
-    },
-    directApply: false,
-    url: notice.official_url,
-  };
+  // Structured data: a JobPosting for recruitment notices (which is what
+  // Google can surface), otherwise a plain Article. Both must carry a real
+  // location and a canonical URL — an incomplete JobPosting is worse than
+  // none at all.
+  const noticeUrl = `${SITE_URL}/gazette/${notice.slug}`;
+
+  const jsonLd =
+    notice.kind === "recruitment"
+      ? {
+          "@context": "https://schema.org",
+          "@type": "JobPosting",
+          title: notice.title,
+          description: notice.summary,
+          datePosted: notice.created_at,
+          validThrough: notice.apply_last_date ?? undefined,
+          employmentType: "FULL_TIME",
+          hiringOrganization: {
+            "@type": "GovernmentOrganization",
+            name: notice.department,
+            sameAs: notice.official_url,
+          },
+          jobLocation: {
+            "@type": "Place",
+            address: {
+              "@type": "PostalAddress",
+              addressCountry: "IN",
+            },
+          },
+          applicantLocationRequirements: {
+            "@type": "Country",
+            name: "India",
+          },
+          directApply: false,
+          url: noticeUrl,
+          publisher: {
+            "@type": "Organization",
+            name: SITE_NAME,
+            url: SITE_URL,
+          },
+        }
+      : {
+          "@context": "https://schema.org",
+          "@type": "Article",
+          headline: notice.title,
+          description: notice.summary,
+          datePublished: notice.created_at,
+          dateModified: notice.updated_at,
+          inLanguage: "en-IN",
+          mainEntityOfPage: noticeUrl,
+          url: noticeUrl,
+          publisher: {
+            "@type": "Organization",
+            name: SITE_NAME,
+            url: SITE_URL,
+          },
+        };
 
   return (
     <article className="mx-auto max-w-6xl px-6 pb-32 pt-20 md:px-10 md:pt-28">
