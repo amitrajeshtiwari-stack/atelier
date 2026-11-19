@@ -3,6 +3,7 @@ import { CONTACT_EMAIL, SITE_NAME } from "@/lib/site";
 
 const FOOTER_LINKS = [
   { href: "/gazette", label: "The Plate" },
+  { href: "/guides", label: "Guides" },
   { href: "/archive", label: "Archive" },
   { href: "/about", label: "About" },
 ];

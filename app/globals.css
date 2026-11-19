@@ -186,6 +186,20 @@
     margin-top: 1.15rem;
   }
 
+  /* Guides group their paragraphs in sections; the same rhythm has to
+     reach inside, or the piece reads as one unbroken block. */
+  .legal-prose section + section {
+    margin-top: 2.75rem;
+  }
+
+  .legal-prose section > * + * {
+    margin-top: 1.15rem;
+  }
+
+  .legal-prose section > h2:first-child {
+    margin-top: 0;
+  }
+
   .legal-prose h2 {
     margin-top: 3rem;
     font-size: 1.5rem;

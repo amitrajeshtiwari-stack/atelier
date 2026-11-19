@@ -229,6 +229,23 @@ export default async function NoticePage({ params }: Params) {
             </li>
           ))}
         </ul>
+        <p className="mt-5 text-sm leading-relaxed text-ink-soft">
+          New to government applications? Start with{" "}
+          <Link
+            href="/guides/how-to-read-a-government-job-notice"
+            className="text-ink underline decoration-line underline-offset-4"
+          >
+            how to read a notice
+          </Link>{" "}
+          or the{" "}
+          <Link
+            href="/guides"
+            className="text-ink underline decoration-line underline-offset-4"
+          >
+            reference desk
+          </Link>
+          .
+        </p>
       </Reveal>
 
       {/* ── Join now ──────────────────────────────────────────────────── */}

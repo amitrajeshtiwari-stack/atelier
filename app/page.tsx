@@ -6,6 +6,7 @@ import { formatNoticeDate } from "@/lib/notice-format";
 import { GazetteBoard } from "@/components/gazette/gazette-board";
 import { FlagMark } from "@/components/gazette/flag-mark";
 import { Reveal } from "@/components/motion/reveal";
+import { GUIDES } from "@/lib/guides";
 import {
   SITE_DESCRIPTION,
   SITE_NAME,
@@ -179,14 +180,63 @@ export default async function HomePage() {
               </Reveal>
             ))}
           </div>
+          {/* ── Reference desk ─────────────────────────────────────────── */}
+          <Reveal className="mt-24">
+            <div className="flex items-baseline justify-between border-b border-line pb-3">
+              <p className="eyebrow">Reference desk</p>
+              <Link
+                href="/guides"
+                className="font-mono text-[0.625rem] tracking-[0.18em] text-ink-faint uppercase transition-colors duration-300 hover:text-ink"
+              >
+                All guides
+              </Link>
+            </div>
+            <ul>
+              {GUIDES.slice(0, 3).map((guide) => (
+                <li key={guide.slug}>
+                  <Link
+                    href={`/guides/${guide.slug}`}
+                    className="group flex flex-col gap-2 border-b border-line py-6 transition-colors duration-300 hover:bg-accent-soft/40 sm:flex-row sm:items-baseline sm:justify-between sm:gap-8"
+                  >
+                    <span>
+                      <span className="block font-display text-lg text-ink">
+                        {guide.title}
+                      </span>
+                      <span className="mt-1 block max-w-[56ch] text-sm text-ink-soft">
+                        {guide.description}
+                      </span>
+                    </span>
+                    <span className="flex shrink-0 items-center gap-3 font-mono text-[0.625rem] tracking-[0.12em] text-ink-faint uppercase">
+                      {guide.readingMinutes} min
+                      <ArrowUpRight
+                        className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                        strokeWidth={1.5}
+                      />
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+
           <Reveal delay={0.2}>
-            <p className="mt-16 max-w-[74ch] font-mono text-[0.625rem] leading-relaxed tracking-[0.06em] text-ink-faint">
-              DISCLAIMER · The Gazette reprints public recruitment
-              announcements for reference only and never hosts applications.
-              Every entry links to the official government portal. Details can
-              change — always confirm against the official notification before
-              paying any fee or submitting a form. The Gazette is not
-              affiliated with any government body.
+            <p className="mt-16 max-w-[74ch] text-xs leading-relaxed text-ink-faint">
+              {SITE_NAME} is an independent publication. Briefs are written here
+              from each department&rsquo;s own announcement; the official
+              notification always governs and every entry links to it. We host no
+              applications and charge nothing. See the{" "}
+              <Link href="/disclaimer" className="underline underline-offset-4 hover:text-ink">
+                disclaimer
+              </Link>
+              ,{" "}
+              <Link href="/editorial" className="underline underline-offset-4 hover:text-ink">
+                editorial policy
+              </Link>{" "}
+              and{" "}
+              <Link href="/privacy" className="underline underline-offset-4 hover:text-ink">
+                privacy policy
+              </Link>
+              .
             </p>
           </Reveal>
         </div>
