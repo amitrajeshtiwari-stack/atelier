@@ -98,7 +98,43 @@ Then, in order:
 
 ---
 
-## 6. Final pass
+## 7. Keep a copy that survives this laptop
+
+Three things are at risk, and only one of them is in git:
+
+| What | Where it lives | If the Mac dies |
+| --- | --- | --- |
+| Code, schema, RLS, guides | GitHub | Fine — but it is the **only** copy |
+| Notices and hand-corrected rows | Supabase | Re-derivable from feeds, *except* manual fixes |
+| `DATABASE_URL`, Supabase keys | `.env.local` on this Mac only | **Gone** |
+
+```bash
+node scripts/backup.mjs                      # → backups/<timestamp>/
+node scripts/backup.mjs --dir ~/somewhere    # write elsewhere
+```
+
+Restore is two commands, structure first:
+
+```bash
+node scripts/run-sql.mjs supabase/schema.sql
+node scripts/run-sql.mjs supabase/gazette.sql
+node scripts/run-sql.mjs backups/<timestamp>/gazette-data.sql
+```
+
+**The snapshot is only half a backup until it leaves the machine.** Copy it
+somewhere off-disk — iCloud Drive, an external drive, anything — and check
+that the free Supabase plan's backup policy covers you (Project Settings →
+Database → Backups). The free tier has historically had no scheduled
+backups.
+
+Worth doing now rather than at launch: enable Time Machine, and put the two
+values from `.env.local` in a password manager. A database you can rebuild
+from feeds is a small loss; a database password you no longer have is not a
+loss at all, it is an afternoon.
+
+---
+
+## 8. Final pass
 
 - [ ] A notice's **Join now** lands on a `.gov.in` / `.nic.in` page, not an
       aggregator.
