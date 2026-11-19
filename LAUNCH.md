@@ -100,37 +100,46 @@ Then, in order:
 
 ## 7. Keep a copy that survives this laptop
 
-Three things are at risk, and only one of them is in git:
-
-| What | Where it lives | If the Mac dies |
-| --- | --- | --- |
-| Code, schema, RLS, guides | GitHub | Fine — but it is the **only** copy |
-| Notices and hand-corrected rows | Supabase | Re-derivable from feeds, *except* manual fixes |
-| `DATABASE_URL`, Supabase keys | `.env.local` on this Mac only | **Gone** |
-
 ```bash
-node scripts/backup.mjs                      # → backups/<timestamp>/
-node scripts/backup.mjs --dir ~/somewhere    # write elsewhere
+node scripts/backup.mjs                  # → backups/gazette-<timestamp>.tar.gz
+node scripts/backup.mjs --dir ~/somewhere
 ```
 
-Restore is two commands, structure first:
+One archive, everything needed to stand the site back up on a machine that has
+never seen this project:
 
-```bash
-node scripts/run-sql.mjs supabase/schema.sql
-node scripts/run-sql.mjs supabase/gazette.sql
-node scripts/run-sql.mjs backups/<timestamp>/gazette-data.sql
-```
+| Inside | Why |
+| --- | --- |
+| `site/gazette.bundle` | full git history, every branch — `git clone` from it |
+| `site/site.tar.gz` | the tracked files at HEAD |
+| `db/gazette-data.sql` | every row, restorable |
+| `db/gazette-snapshot.json` | the same rows plus policies, indexes, constraints |
+| `env/.env.local` | the secrets — omitted with `--no-secrets` |
+| `RESTORE.md` | the procedure, written out |
+| `MANIFEST.txt` | commit, row counts, sha256 of every artifact |
 
-**The snapshot is only half a backup until it leaves the machine.** Copy it
-somewhere off-disk — iCloud Drive, an external drive, anything — and check
-that the free Supabase plan's backup policy covers you (Project Settings →
-Database → Backups). The free tier has historically had no scheduled
-backups.
+The script verifies before it reports success: `git bundle verify` on the
+bundle, and the tarball listed back off disk. Restoring is five steps —
+clone the bundle, copy the env, apply `schema.sql` then `gazette.sql` then the
+data file, `npm ci && npm run build`, redeploy.
 
-Worth doing now rather than at launch: enable Time Machine, and put the two
-values from `.env.local` in a password manager. A database you can rebuild
-from feeds is a small loss; a database password you no longer have is not a
-loss at all, it is an afternoon.
+**This has been rehearsed.** A snapshot was cloned into an empty directory,
+built from scratch with `npm ci`, and served pages against the database. It
+works. Everything the archive holds is restored by that drill except the
+database structure step, which was not run into a separate Supabase project —
+so rehearse that once yourself before you trust it in an emergency.
+
+**An archive on this disk is not a backup.** Copy the `.tar.gz` to iCloud
+Drive, an external drive, anywhere off-machine, and check what the free
+Supabase plan actually covers (Project Settings → Database → Backups — the
+free tier has historically had no scheduled backups).
+
+Two gaps the archive cannot close, both worth five minutes now:
+
+- **`DATABASE_URL` and the Supabase keys** are inside the archive, but a lost
+  laptop is exactly when you cannot read it. Put them in a password manager.
+- **The repo is the only copy of the code.** Enable Time Machine, or keep the
+  `.tar.gz` somewhere that is not this laptop.
 
 ---
 

@@ -121,7 +121,7 @@ npm run build      # production build
 
 ```bash
 node scripts/run-sql.mjs <file.sql>   # apply SQL directly to Postgres
-node scripts/backup.mjs               # snapshot every table to backups/<timestamp>/
+node scripts/backup.mjs               # whole-site snapshot → backups/gazette-<timestamp>.tar.gz
 node scripts/ingest-gazette.mjs       # file today's notices from RSS feeds
 node scripts/notify-reload.mjs        # nudge PostgREST's schema cache
 node scripts/check-policies.mjs       # dump RLS policies + RLS flags
