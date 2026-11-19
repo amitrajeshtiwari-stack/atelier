@@ -98,10 +98,18 @@ async function main() {
     );
     if (ready.length === 0) {
       /* a cycle: fall back to alphabetical for whatever is left */
-      for (const t of allTables) if (!placed.has(t)) ordered.push(t), placed.add(t);
+      for (const t of allTables) {
+        if (!placed.has(t)) {
+          ordered.push(t);
+          placed.add(t);
+        }
+      }
       break;
     }
-    for (const t of ready) ordered.push(t), placed.add(t);
+    for (const t of ready) {
+      ordered.push(t);
+      placed.add(t);
+    }
   }
 
   /* ── dump each table ───────────────────────────────────────────────── */
