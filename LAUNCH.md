@@ -1,5 +1,7 @@
 # Go-live checklist
 
+**Target: first week of December 2026.** Nothing below starts until then.
+
 Ordered, and step 1 is the one to do **before** the site is reachable at a
 public URL. Everything else is reversible; that one is not.
 
