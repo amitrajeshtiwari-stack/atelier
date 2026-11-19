@@ -128,3 +128,9 @@ node scripts/check-policies.mjs       # dump RLS policies + RLS flags
 
 `scripts/youtube/` belongs to a separate documentary-video workflow —
 see `scripts/youtube/README.md`.
+
+## Going live
+
+See **[`LAUNCH.md`](LAUNCH.md)** before the site is reachable at a public URL.
+Step 1 is making this repository private: the ingest method lives in
+`scripts/ingest-gazette.mjs` and should not stay readable once the site ships.
